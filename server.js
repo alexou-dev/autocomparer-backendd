@@ -5,11 +5,15 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Endpoint de recherche et d'agrégation
-app.get('/api/search', async (req, res) => {
+// Page d'accueil pour tester que le serveur fonctionne (évite l'écran blanc)
+app.get('/', (req, res) => {
+    res.send('<h1>Serveur AutoComparer Backend actif !</h1><p>L\'API est prête sur /api/search</p>');
+});
+
+// Route de recherche pour votre site
+app.get('/api/search', (req, res) => {
     const { brand, model, yearMin, yearMax, province, sortBy } = req.query;
 
-    // Exemple de structure d'annonces
     let results = [
         {
             id: '1',
@@ -39,11 +43,8 @@ app.get('/api/search', async (req, res) => {
         }
     ];
 
-    // Tri dynamique par prix ou par km
     if (sortBy === 'price_asc') {
         results.sort((a, b) => a.price - b.price);
-    } else if (sortBy === 'price_desc') {
-        results.sort((a, b) => b.price - a.price);
     } else if (sortBy === 'km_asc') {
         results.sort((a, b) => a.km - b.km);
     }
@@ -53,5 +54,5 @@ app.get('/api/search', async (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`Serveur démarré sur le port ${PORT}`);
+    console.log(`Serveur prêt sur le port ${PORT}`);
 });
